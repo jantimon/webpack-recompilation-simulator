@@ -3,3 +3,4 @@ test/dist
 test-es5
 tmp
 lib
+npm-debug.log
