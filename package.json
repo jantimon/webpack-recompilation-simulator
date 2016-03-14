@@ -1,15 +1,17 @@
 {
   "name": "webpack-recompilation-simulator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helper to test and measure webpack recompilations",
-  "files": "lib/index.js",
+  "files": ["lib/index.js"],
   "main": "lib/index.js",
   "scripts": {
     "prepublish": "npm run build",
     "prebuild": "npm run test",
     "build": "babel src -d lib --presets es2015",
-    "pretest": "semistandard src/**/*.js test/**/*.js",
-    "test": "mocha"
+    "pretest": "babel test -d test-es5 --presets es2015",
+    "test": "mocha test-es5/index.js",
+    "posttest": "semistandard src/**/*.js test/**/*.js",
+    "test-es6": "mocha test/index.js"
   },
   "repository": {
     "type": "git",
