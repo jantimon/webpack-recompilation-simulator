@@ -1,5 +1,5 @@
 /* global beforeEach, afterEach, it, describe */
-const WebpackRecompilationHelper = require('../src/index.js');
+const WebpackRecompilationHelper = require('../src/');
 const assert = require('chai').assert;
 const path = require('path');
 const rimraf = require('rimraf');

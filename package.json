@@ -8,10 +8,9 @@
     "prepublish": "npm run build",
     "prebuild": "npm run test",
     "build": "babel src -d lib --presets es2015",
-    "pretest": "babel test -d test-es5 --presets es2015",
-    "test": "mocha test-es5/index.js",
-    "posttest": "semistandard src/**/*.js test/**/*.js",
-    "test-es6": "mocha test/index.js"
+    "pre": "semistandard src/**/*.js test/**/*.js",
+    "test": "mocha --compilers js:babel-core/register",
+    "test-es6": "mocha"
   },
   "repository": {
     "type": "git",
