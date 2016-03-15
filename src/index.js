@@ -34,8 +34,8 @@ module.exports = class WebpackRecompilationHelper {
   simulateFileChange (filename, options) {
     options = options || {};
     filename = path.resolve(filename);
-    const tmpDir = tempfs.mkdirSync({dir: this.tmpDirectory, track: true});
-    const tmpFile = tempfs.openSync({dir: tmpDir.path, name: path.basename(filename), track: true});
+    const tmpDir = tempfs.mkdirSync({dir: this.tmpDirectory, track: true, recursive: true});
+    const tmpFile = tempfs.openSync({dir: tmpDir.path, name: path.basename(filename), track: false});
     const originalFileContent = fs.readFileSync(filename).toString();
     const banner = options.banner || '';
     const footer = options.footer || '';
