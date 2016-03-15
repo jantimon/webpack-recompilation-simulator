@@ -1,8 +1,7 @@
 'use strict';
-const mkdirp = require('mkdirp');
+const tempfs = require('temp-fs');
 const fs = require('fs');
 const path = require('path');
-let changeCount = 0;
 
 module.exports = class WebpackRecompilationHelper {
 
@@ -11,7 +10,7 @@ module.exports = class WebpackRecompilationHelper {
     this.options = options || {};
     this.mappings = { files: {}, folders: {} };
     // The tmp direcotry for the modified files
-    this.tmpDirectory = this.options.tmpDirectory || path.join(process.cwd(), 'tmp');
+    this.tmpDirectory = this.options.tmpDirectory;
     // As we don't want to change the real source files we tell webpack to use
     // a version in the tmp directory
     compiler.plugin('normal-module-factory', (nmf) => {
@@ -35,7 +34,8 @@ module.exports = class WebpackRecompilationHelper {
   simulateFileChange (filename, options) {
     options = options || {};
     filename = path.resolve(filename);
-    const tmpFileName = path.join(this.tmpDirectory, '__' + (++changeCount), path.dirname(filename), path.basename(filename));
+    const tmpDir = tempfs.mkdirSync({dir: this.tmpDirectory, track: true});
+    const tmpFile = tempfs.openSync({dir: tmpDir.path, name: path.basename(filename), track: true});
     const originalFileContent = fs.readFileSync(filename).toString();
     const banner = options.banner || '';
     const footer = options.footer || '';
@@ -46,9 +46,8 @@ module.exports = class WebpackRecompilationHelper {
     if (content === originalFileContent) {
       throw new Error('File was not changed');
     }
-    mkdirp.sync(path.dirname(tmpFileName));
-    fs.writeFileSync(tmpFileName, content);
-    this.addMapping(filename, tmpFileName);
+    fs.writeSync(tmpFile.fd, content);
+    this.addMapping(filename, fs.realpathSync(tmpFile.path));
   }
 
   /**
