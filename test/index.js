@@ -1,8 +1,7 @@
-/* global beforeEach, afterEach, it, describe */
+/* global beforeEach, it, describe */
 const WebpackRecompilationHelper = require('../src/');
 const assert = require('chai').assert;
 const path = require('path');
-const rimraf = require('rimraf');
 
 const loaderMock = require('./loader');
 const webpackConfig = () => ({
@@ -39,10 +38,6 @@ beforeEach(function () {
   loaderMock.history = {};
   webpackSimulator = new WebpackRecompilationHelper(webpack(webpackConfig()));
   return webpackSimulator;
-});
-
-afterEach(function () {
-  rimraf.sync(path.resolve(__dirname, '..', 'tmp'));
 });
 
 describe('webpackSimulator', function () {

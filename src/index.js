@@ -75,7 +75,7 @@ module.exports = class WebpackRecompilationHelper {
    * Compile
    */
   run () {
-    return new Promise((resolve) => this.compiler.run(() => resolve(this.stats)));
+    return new Promise((resolve) => this.compiler.run(() => process.nextTick(() => resolve(this.stats))));
   }
 
 };
