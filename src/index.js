@@ -47,6 +47,7 @@ module.exports = class WebpackRecompilationHelper {
       throw new Error('File was not changed');
     }
     fs.writeSync(tmpFile.fd, content);
+    fs.closeSync(tmpFile.fd);
     this.addMapping(filename, fs.realpathSync(tmpFile.path));
   }
 
