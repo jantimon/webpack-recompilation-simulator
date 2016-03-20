@@ -74,7 +74,18 @@ module.exports = class WebpackRecompilationHelper {
    * Compile
    */
   run () {
-    return new Promise((resolve) => this.compiler.run(() => process.nextTick(() => resolve(this.stats))));
+    return new Promise((resolve) =>
+      // Wait for 10ms before starting the compile run
+      setTimeout(() =>
+        this.compiler.run(() =>
+          // Wait for the next tick before resolving to allow all
+          // plugins to finish
+          process.nextTick(() =>
+            resolve(this.stats)
+          )
+        )
+      , 10)
+    );
   }
 
 };
