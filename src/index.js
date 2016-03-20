@@ -65,8 +65,15 @@ module.exports = class WebpackRecompilationHelper {
    * This function uses the mapping to compile the fake file instead of the real source file
    */
   _resolveDependency (data) {
+    // Context mapping
     data.context = this.mappings.folders[data.context] || data.context;
-    data.request = this.mappings.files[path.resolve(data.context, data.request)] || data.request;
+    // File mapping
+    const requestParts = data.request.split('!');
+    const requestedFile = path.resolve(data.context, requestParts.pop());
+    if (this.mappings.files[requestedFile]) {
+      requestParts.push(this.mappings.files[requestedFile]);
+      data.request = requestParts.join('!');
+    }
     return data;
   }
 

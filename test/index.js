@@ -1,5 +1,6 @@
 /* global beforeEach, it, describe */
 const WebpackRecompilationHelper = require('../src/');
+const webpack = require('webpack');
 const assert = require('chai').assert;
 const path = require('path');
 
@@ -32,9 +33,8 @@ function getBaseFileNames (files) {
   return files;
 }
 
-var webpackSimulator;
+let webpackSimulator;
 beforeEach(function (done) {
-  const webpack = require('webpack');
   loaderMock.history = {};
   webpackSimulator = new WebpackRecompilationHelper(webpack(webpackConfig()));
   done();
@@ -80,6 +80,21 @@ describe('webpackSimulator', function () {
   });
 
   it('should allow to overwrite the content and add a new dependency', function () {
+    return webpackSimulator
+      .run()
+      .then(() => webpackSimulator.simulateFileChange(__dirname + '/src/main.js', {content: 'require("./demo.js");'}))
+      .then(() => webpackSimulator.run())
+      .then(function (stats) {
+        var files = stats.compilation.fileDependencies.map((filename) => path.basename(filename));
+        files.sort();
+        assert.deepEqual(['demo.js', 'main.js'], getBaseFileNames(stats.compilation.fileDependencies));
+      });
+  });
+
+  it('should allow to overwrite the content even if a loader configuration is peresent', function () {
+    const config = webpackConfig();
+    config.entry.main = '!!' + config.entry.main;
+    webpackSimulator = new WebpackRecompilationHelper(webpack(config));
     return webpackSimulator
       .run()
       .then(() => webpackSimulator.simulateFileChange(__dirname + '/src/main.js', {content: 'require("./demo.js");'}))
