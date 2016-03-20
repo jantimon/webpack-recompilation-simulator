@@ -11,7 +11,7 @@
     "prebuild": "npm run test",
     "build": "babel src -d lib --presets es2015",
     "pre": "semistandard src/**/*.js test/**/*.js",
-    "test": "mocha --compilers js:babel-core/register",
+    "test": "mocha --timeout 15000 --compilers js:babel-core/register",
     "test-es6": "mocha"
   },
   "repository": {

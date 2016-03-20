@@ -37,7 +37,6 @@ beforeEach(function () {
   const webpack = require('webpack');
   loaderMock.history = {};
   webpackSimulator = new WebpackRecompilationHelper(webpack(webpackConfig()));
-  return webpackSimulator;
 });
 
 describe('webpackSimulator', function () {

@@ -35,7 +35,7 @@ module.exports = class WebpackRecompilationHelper {
     options = options || {};
     filename = path.resolve(filename);
     const tmpDir = tempfs.mkdirSync({dir: this.tmpDirectory, track: true, recursive: true});
-    const tmpFile = tempfs.openSync({dir: tmpDir.path, name: path.basename(filename), track: false});
+    const tmpFile = path.join(tmpDir.path, path.basename(filename));
     const originalFileContent = fs.readFileSync(filename).toString();
     const banner = options.banner || '';
     const footer = options.footer || '';
@@ -46,9 +46,8 @@ module.exports = class WebpackRecompilationHelper {
     if (content === originalFileContent) {
       throw new Error('File was not changed');
     }
-    fs.writeSync(tmpFile.fd, content);
-    fs.closeSync(tmpFile.fd);
-    this.addMapping(filename, fs.realpathSync(tmpFile.path));
+    fs.writeFileSync(tmpFile, content);
+    this.addMapping(filename, fs.realpathSync(tmpFile));
   }
 
   /**
