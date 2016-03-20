@@ -10,7 +10,7 @@ version: "{build}"
 build: off
 deploy: off
 matrix:
-  fast_finish: true
+  fast_finish: false
 
 install:
   - ps: Install-Product node $env:nodejs_version
