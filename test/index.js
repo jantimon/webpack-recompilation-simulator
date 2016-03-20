@@ -33,10 +33,11 @@ function getBaseFileNames (files) {
 }
 
 var webpackSimulator;
-beforeEach(function () {
+beforeEach(function (done) {
   const webpack = require('webpack');
   loaderMock.history = {};
   webpackSimulator = new WebpackRecompilationHelper(webpack(webpackConfig()));
+  done();
 });
 
 describe('webpackSimulator', function () {
