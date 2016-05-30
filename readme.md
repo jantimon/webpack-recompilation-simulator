@@ -7,7 +7,7 @@ during webpacks recompilation.
 
 ```js
   var compiler = webpack(config);
-  var webpackSimulator = new WebpackRecompilationHelper(comiler);
+  var webpackSimulator = new WebpackRecompilationHelper(compiler);
 
   webpackSimulator.run()  
     .then(function(stats) {
