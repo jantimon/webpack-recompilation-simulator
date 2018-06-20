@@ -1,6 +1,6 @@
 {
   "name": "webpack-recompilation-simulator",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Helper to test and measure webpack recompilations",
   "files": [
     "lib/index.js"
