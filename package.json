@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Helper to test and measure webpack recompilations",
   "files": [
-    "lib/index.js"
+    "src/"
   ],
   "main": "src/index.js",
   "scripts": {
