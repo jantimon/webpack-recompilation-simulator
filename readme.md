@@ -68,22 +68,58 @@ Make sure that you added it using `addTestFile`.
     });
 ```
 
-## Usage:
+## Simulate a file change using the node api
+
+It is also possible to directly modify files using the fs api
+
+``js
+  const tempMainFile = webpackSimulator.addTestFile(__dirname + '/src/main.js');
+  
+  fs.writeFileSync(tempMainFile, '// Hello world');
+``
+
+
+## Examples
+
+### Watch mode
 
 ```js
   const compiler = webpack(config);
   const webpackSimulator = new WebpackRecompilationHelper(compiler);
   
-  const testFilePath = __dirname + '/src/main.js';
-  webpackSimulator.addTestFile(testFilePath);
+  const tempMainFile = webpackSimulator.addTestFile(__dirname + '/src/main.js');
+
+  // Start watching (this will also trigger an initial build)
+  webpackSimulator.startWatching()  
+    .then((stats) => {
+      console.log('Initial compilation result:', stats);
+      // Simulate a change to the main.js file 
+      fs.writeFileSync(tempMainFile, 'require("./demo.js");');
+      // Wait until webpack detects the file change and compiles again
+      return webpackSimulator.waitForWatchRunComplete();
+    })
+    .then((stats) => {
+      console.log('Partial compilation result:', stats);
+    })
+    // Stop watching
+    .then(() => {
+      return webpackSimulator.stopWatching();
+    });
+```
+
+### Direct compile runs
+
+```js
+  const compiler = webpack(config);
+  const webpackSimulator = new WebpackRecompilationHelper(compiler);
+  
+  const tempMainFile = webpackSimulator.addTestFile(__dirname + '/src/main.js');
 
   webpackSimulator.run()  
     .then(function(stats) {
       console.log('Initial compilation result:', stats);
       // Simulate a change to the main.js file
-      webpackSimulator.simulateFileChange(testFilePath, {
-        banner: 'require("./demo.js");'
-      });
+      fs.writeFileSync(tempMainFile, 'require("./demo.js");');
       // Compile it again:
       return webpackSimulator.run();
     })
