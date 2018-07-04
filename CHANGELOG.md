@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/jantimon/webpack-recompilation-simulator/compare/v2.0.1...v3.0.0) (2018-07-04)
+
+
+### Features
+
+* Add watch mode ([621d2ab](https://github.com/jantimon/webpack-recompilation-simulator/commit/621d2ab))
+
+
+### BREAKING CHANGES
+
+* Use loader instead of resolve settings
+
+
+
 <a name="2.0.1"></a>
 ## [2.0.1](https://github.com/jantimon/webpack-recompilation-simulator/compare/v2.0.0...v2.0.1) (2018-06-20)
 
