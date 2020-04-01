@@ -9,6 +9,8 @@ const fs = require("fs");
 
 
 const loaderMock = require("./loader");
+const srcDir = path.resolve(__dirname, 'src') + path.sep;
+
 const webpackConfig = () => ({
   // Webpack will only cache in "development" mode
   // See https://github.com/webpack/webpack/issues/7533
@@ -37,10 +39,12 @@ const webpackConfig = () => ({
 });
 
 function getBaseFileNames(files) {
-  files = Array.from(files || []).map(filename => path.basename(filename));
+  files = Array.from(files || []);
   files.sort();
-  // Ignore tmp files:
-  const filesWithoutTmpFiles = files.filter((filename) => filename.indexOf('__') !== 0);
+  // Ignore tmp files and files outside srcDir
+  const filesWithoutTmpFiles = files.filter((filename) => filename.indexOf('__') !== 0)
+    .filter((filename) => filename.indexOf(srcDir) !== -1)
+    .map(filename => path.basename(filename));
   return filesWithoutTmpFiles;
 }
 
